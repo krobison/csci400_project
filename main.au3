@@ -11,7 +11,11 @@ func main()
    drawBoard()
 
    for $i = 0 To 8 Step 1
-	  drawCircle($i)
+	  if (Mod($i,2) == 0) then
+		 drawCircle($i)
+	  Else
+		 drawX($i)
+	  EndIf
    Next
 EndFunc
 
@@ -173,8 +177,24 @@ func drawCircle($index)
    setShape("circle")
    $pos = getCell($index)
 
-   MouseMove($pos[0]+8,$pos[1]+8)
+   MouseMove($pos[0]+8,$pos[1]+8,5)
    MouseDown("left")
-   MouseMove($pos[0]+48,$pos[1]+48)
+   MouseMove($pos[0]+48,$pos[1]+48,5)
+   MouseUp("left")
+   Send("{ENTER}")
+EndFunc
+
+func drawX($index)
+   setTool("brush")
+   getColor("blue")
+   $pos = getCell($index)
+
+   MouseMove($pos[0]+8,$pos[1]+8,5)
+   MouseDown("left")
+   MouseMove($pos[0]+48,$pos[1]+48,5)
+   MouseUp("left")
+   MouseMove($pos[0]+48,$pos[1]+8,5)
+   MouseDown("left")
+   MouseMove($pos[0]+8,$pos[1]+48,5)
    MouseUp("left")
 EndFunc
