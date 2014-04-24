@@ -9,6 +9,10 @@ func main()
    drawWelcome()
    ;draw board
    drawBoard()
+
+   for $i = 0 To 8 Step 1
+	  drawCircle($i)
+   Next
 EndFunc
 
 
@@ -55,7 +59,7 @@ func drawWelcome()
    MouseClick("left",134,196)
 
    ;set stroke delay for emphasis
-   opt("SendKeyDelay",200)
+   opt("SendKeyDelay",100)
    Send("Welcome to Tic Tac Toe!")
    opt("SendKeyDelay",5)
 
@@ -118,7 +122,7 @@ EndFunc
 
 func setShape($shape)
    if $shape == "circle" Then
-	  send("{ALT}hsh{RIGHT}{RIGHT}")
+	  send("{ALT}hsh{HOME}{RIGHT}{RIGHT}")
 	  send("{ENTER}")
    EndIf
 EndFunc
@@ -162,4 +166,15 @@ func getCell($index)
    $pos[1] = $y + $row*$stepy
 
    return $pos
+EndFunc
+
+func drawCircle($index)
+   getColor("green")
+   setShape("circle")
+   $pos = getCell($index)
+
+   MouseMove($pos[0]+8,$pos[1]+8)
+   MouseDown("left")
+   MouseMove($pos[0]+48,$pos[1]+48)
+   MouseUp("left")
 EndFunc
