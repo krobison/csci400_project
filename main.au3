@@ -17,6 +17,17 @@ func main()
    play()
 EndFunc
 
+func main2()
+   ;Set drawing size
+   setPaintWidth()
+   ;draw welcome text
+   drawWelcome()
+   ;draw board
+   drawBoard()
+
+   play()
+EndFunc
+
 func play()
    $turn = 0
    while 1
@@ -29,11 +40,11 @@ func play()
 	  $input = -1
 	  while $input == -1
 		 $input = Number(InputBox("Enter Move","Please enter the number corresponding to your move, "&$player,"1") -1)
-		 if ($input < 1) Or ($input > 8) Then
+		 if ($input < 0) Or ($input > 8) Then
 			$input = -1
 		 EndIf
 		 if $input > -1 Then
-			if ($board[$input-1] == 1) Then
+			if ($board[$input] > 0) Then
 			   $input = -1
 			EndIf
 		 EndIf
@@ -41,16 +52,82 @@ func play()
 
 	  if $player == "X" Then
 		 drawX($input)
+		 $board[$input] = 1
 	  Else
 		 drawCircle($input)
+		 $board[$input] = 2
 	  EndIf
 
-	  $board[$input] = 1
-
 	  $turn += 1
+	  checkWinners($turn)
+
    WEnd
 EndFunc
 
+func checkWinners($count)
+   ;rows
+   if ($board[0] == $board[1] And $board[2] == $board[1] And $board[0] > 0) Then
+	  MsgBox(0,"",letter($board[0])&" is the winner!")
+	  restart()
+   EndIf
+   if ($board[3] == $board[4] And $board[4] == $board[5] And $board[3] > 0) Then
+	  MsgBox(0,"",letter($board[3])&" is the winner!")
+	  restart()
+   EndIf
+   if ($board[6] == $board[7] And $board[7] == $board[8] And $board[6] > 0) Then
+	  MsgBox(0,"",letter($board[6])&" is the winner!")
+	  restart()
+   EndIf
+   ;cols
+   if ($board[0] == $board[3] And $board[3] == $board[6] And $board[0] > 0) Then
+	  MsgBox(0,"",letter($board[0])&" is the winner!")
+	  restart()
+   EndIf
+   if ($board[1] == $board[4] And $board[4] == $board[7] And $board[1] > 0) Then
+	  MsgBox(0,"",letter($board[1])&" is the winner!")
+	  restart()
+   EndIf
+   if ($board[2] == $board[5] And $board[5] == $board[8] And $board[2] > 0) Then
+	  MsgBox(0,"",letter($board[2])&" is the winner!")
+	  restart()
+   EndIf
+   ;diag
+   if ($board[0] == $board[4] And $board[4] == $board[8] And $board[0] > 0) Then
+	  MsgBox(0,"",letter($board[0])&" is the winner!")
+	  restart()
+   EndIf
+   if ($board[2] == $board[4] And $board[4] == $board[6] And $board[2] > 0) Then
+	  MsgBox(0,"",letter($board[2])&" is the winner!")
+	  restart()
+   EndIf
+   if $count == 9 Then
+	  MsgBox(0,"","DRAW")
+	  restart()
+   EndIf
+EndFunc
+
+func restart()
+   send("^a")
+   send("{DEL}")
+   $board[0] = 0
+   $board[1] = 0
+   $board[2] = 0
+   $board[3] = 0
+   $board[4] = 0
+   $board[5] = 0
+   $board[6] = 0
+   $board[7] = 0
+   $board[8] = 0
+
+   Call("main2")
+EndFunc
+
+func letter($num)
+   if $num == 1 Then
+	  return "X"
+   EndIf
+   return "O"
+EndFunc
 
 func initialize()
    ;Execute Paint
@@ -96,7 +173,7 @@ func drawWelcome()
 
    ;set stroke delay for emphasis
    opt("SendKeyDelay",100)
-   Send("Welcome to Tic Tac Toe!")
+   Send("Welcome to Tic Tac Toe (Press Pause to quit)")
    opt("SendKeyDelay",5)
 
    setTool("brush")
