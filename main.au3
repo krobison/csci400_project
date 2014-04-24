@@ -1,3 +1,7 @@
+HotKeySet("{PAUSE}","ender")
+
+Global $board[9] = [0,0,0,0,0,0,0,0,0]
+
 call("main")
 
 func main()
@@ -10,13 +14,41 @@ func main()
    ;draw board
    drawBoard()
 
-   for $i = 0 To 8 Step 1
-	  if (Mod($i,2) == 0) then
-		 drawCircle($i)
+   play()
+EndFunc
+
+func play()
+   $turn = 0
+   while 1
+	  Sleep(200)
+	  if Mod($turn,2) == 1 Then
+		 $player = "X"
 	  Else
-		 drawX($i)
+		 $player = "O"
 	  EndIf
-   Next
+	  $input = -1
+	  while $input == -1
+		 $input = Number(InputBox("Enter Move","Please enter the number corresponding to your move, "&$player,"1") -1)
+		 if ($input < 1) Or ($input > 8) Then
+			$input = -1
+		 EndIf
+		 if $input > -1 Then
+			if ($board[$input-1] == 1) Then
+			   $input = -1
+			EndIf
+		 EndIf
+	  WEnd
+
+	  if $player == "X" Then
+		 drawX($input)
+	  Else
+		 drawCircle($input)
+	  EndIf
+
+	  $board[$input] = 1
+
+	  $turn += 1
+   WEnd
 EndFunc
 
 
@@ -197,4 +229,8 @@ func drawX($index)
    MouseDown("left")
    MouseMove($pos[0]+8,$pos[1]+48,5)
    MouseUp("left")
+EndFunc
+
+func ender()
+   exit
 EndFunc
