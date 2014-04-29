@@ -153,7 +153,7 @@ func setPaintWidth()
    Sleep(100)
    ;Press 'e' for properties window
    Send("e")
-   Sleep(100)
+   Sleep(1000)
    ;send width and height separated by tabs
    Sleep(300)
    send("800")
@@ -170,11 +170,12 @@ func drawWelcome()
    MouseClick("left",128,192)
    setFontSize("14")
    MouseClick("left",134,196)
-
+   Sleep(1000)
    ;set stroke delay for emphasis
    opt("SendKeyDelay",100)
    Send("Welcome to Tic Tac Toe (Press Pause to quit)")
    opt("SendKeyDelay",5)
+   Sleep(500)
 
    setTool("brush")
 EndFunc
@@ -218,6 +219,7 @@ func drawNumbers()
 EndFunc
 
 func setTool($tool)
+   Sleep(500)
    if $tool == "text" Then
 	  $key = "t"
    EndIf
